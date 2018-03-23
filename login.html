@@ -1,0 +1,203 @@
+<html lang="en">
+<head>
+<meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="205217580365-invfr38ahsn6b15d0kfi5f7655976o0m.apps.googleusercontent.com">
+	    <script src="https://apis.google.com/js/client:platform.js?onload=startApp" async defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script src='static/js/script2.js'></script>
+
+<style>
+.fb-login-button{
+margin-top:10px;
+}
+
+.clear{
+clear:both;
+}
+</style>
+<!--<Script src="static/js/script.js"></script>!-->
+<link rel="stylesheet" href="/static/css/upside.css">
+</head>
+<body>
+<div class="other_login">
+<div id="gConnect">
+      <div id="signin-button"></div>
+    </div>
+</div>
+<div class="login_border">
+<div class="Login_title">LOGIN</div>
+<form method="post" action="/logon">
+<input type="text" name="userd" class="textbox" placeholder="Username">
+<input type="password" name="pass" class="textbox" placeholder="Password">
+<input type="submit" class="login_button" value="Login">
+</form>
+<form method="post" action="/signup">
+ <div class="signup">Not a member? </div> 
+ <input value="Sign up!" class="signup_2" type="submit">
+ <div class="clear"></div>
+ </form>
+</div>
+<!--<div class="other_login">
+<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false"></div>	
+</div>
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.12';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<script>
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+   
+    if (response.status === 'connected') {
+      testAPI();
+    } else {
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    }
+  }
+
+
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '161062781371598',
+      cookie     : true,  
+                          
+      xfbml      : true, 
+      version    : 'v2.8'
+    });
+
+   
+
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+
+  };
+
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+  }
+</script>
+<script>
+	  function onSignIn(googleUser){ 	
+		alert("Duck");
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+		alert("Duck");
+        alert("ID: " + profile.getId()); // Don't send this directly to your server!
+        alert('Full Name: ' + profile.getName());
+        alert('Given Name: ' + profile.getGivenName());
+        alert('Family Name: ' + profile.getFamilyName());
+        alert("Image URL: " + profile.getImageUrl());
+        alert("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+      };
+function signOut(){
+var auth2=gapi.auth2.getAuthInstance();
+auth2.signOut().then(function(){
+alert("You gone outside!");
+$(".g-signin2").css("display","block");
+$(".data").css("display","none");
+});
+}
+    </script>
+	<Script>
+	$(document).ready(function(){
+	$(".g-signin2").click(function(){
+	alert("asd");
+	});
+	});
+	</script>!-->
+	<script type="text/javascript">
+	var name,mail;
+      /**
+       * Minimal implementation of Sign-in button rendered at load.
+       */
+      function startApp() {
+	  
+				
+        gapi.load('auth2', function() {
+
+	  gapi.client.load('plus','v1').then(function() {
+            gapi.signin2.render('signin-button', {
+                scope: 'profile',
+                fetch_basic_profile: true
+              });
+            gapi.auth2.init({
+              fetch_basic_profile: true,
+              client_id: '205217580365-invfr38ahsn6b15d0kfi5f7655976o0m.apps.googleusercontent.com',
+              scope:'profile'}).then(function (){
+                  console.log('init');
+                  auth2 = gapi.auth2.getAuthInstance();
+                  auth2.isSignedIn.listen(function() {
+				  if (auth2.isSignedIn.get()) {
+				    var profile = auth2.currentUser.get().getBasicProfile();
+					   name=profile.getName();
+					   mail=profile.getEmail();
+				  alert(name);
+				  alert(mail);                  
+					  
+			
+			$.ajax({
+			type: "POST",
+			url: 'http://localhost:5701/endpoint',
+			data: {
+			mail: mail,
+			},
+			success: function(data){
+				alert(data);
+			},
+			failure:function(){
+				alert("Eroor");
+			}		
+		})
+		alert(mail);
+		}
+                    });
+                  
+                });
+				
+            });
+        });
+      }
+	  function authResponse(){
+        console.log(auth2.currentUser.get().getAuthResponse());
+      }
+
+      window.onbeforeunload = function(e){
+        gapi.auth2.getAuthInstance().signOut();
+      };
+
+	</script>
+</body>
+</html>
